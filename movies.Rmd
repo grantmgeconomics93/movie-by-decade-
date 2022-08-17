@@ -84,6 +84,10 @@ biggestmovie$"2020s"=ifelse(biggestmovie$year<2027 & biggestmovie$year>=2020,1,0
 length(which(biggestmovie$`2020s`== 1))
 
 ```
+```{r}
+biggestmovie$gross=biggestmovie$revenue - biggestmovie$budget
+```
+
 
 
 
