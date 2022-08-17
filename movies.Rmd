@@ -8,6 +8,12 @@ date: "2022-08-16"
 library(readxl)
 Movies <- read_excel("~/git/movie-by-decade-/Movies.xlsx")
 View(Movies)
+library(readxl)
+moviemoney <- read_excel("moviemoney.xlsx", 
+    col_types = c("numeric", "skip", "skip", 
+        "numeric", "date", "numeric", "numeric", 
+        "text"))
+View(moviemoney)
 ```
 
 ```{r,results='hide'}
@@ -21,9 +27,6 @@ library(tidyr)
 Movies=mutate(Movies,"do people really mess with it like that "=dense_rank(vote_average))
 ```
 
-```{r}
-#Movies$aphabet=sort(Movies$title...4)
-```
 
 ```{r}
 Movies$releasedate2=Movies$release_date%>%as.character()
@@ -34,8 +37,53 @@ Movies$releasedate2=Movies$release_date%>%as.character()
 t=separate(Movies,releasedate2,c("date","year"),"-")
 ```
 ```{r}
-Movies$"1910"=ifelse(t$date<1910,Movies$title...4,"na")
+bigmovie=cbind(t$date,Movies)
+#merge by title 
+#rename variable to merge 
+names(bigmovie)[5]= "title"
+biggestmovie=merge(bigmovie,moviemoney,"title")
+
+```
+```{r}
+#cleaned biggest movie to remove unnecessary data
+names(biggestmovie)[2]="year"
+biggestmovie$overview=NULL
+biggestmovie$title...7=NULL
+biggestmovie$id=NULL
+
+#rename variable to merge 
+names(bigmovie)[5]= "title"
 ```
 
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+biggestmovie$"1910s"=ifelse(biggestmovie$year<1920 & biggestmovie$year>=1910,1,0)
+length(which(biggestmovie$`1910s`== 1))
+biggestmovie$"1920s"=ifelse(biggestmovie$year<1930 & biggestmovie$year>=1920,1,0)
+length(which(biggestmovie$`1920s`== 1))
+biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,1,0)
+length(which(biggestmovie$`1930s`== 1))
+biggestmovie$"1940s"=ifelse(biggestmovie$year<1950 & biggestmovie$year>=1940,1,0)
+length(which(biggestmovie$`1940s`== 1))
+biggestmovie$"1950s"=ifelse(biggestmovie$year<1960 & biggestmovie$year>=1950,1,0)
+length(which(biggestmovie$`1950s`== 1))
+biggestmovie$"1960s"=ifelse(biggestmovie$year<1970 & biggestmovie$year>=1960,1,0)
+length(which(biggestmovie$`1960s`== 1))
+biggestmovie$"1970s"=ifelse(biggestmovie$year<1980 & biggestmovie$year>=1970,1,0)
+length(which(biggestmovie$`1970s`== 1))
+biggestmovie$"1980s"=ifelse(biggestmovie$year<1990 & biggestmovie$year>=1980,1,0)
+length(which(biggestmovie$`1980s`== 1))
+biggestmovie$"1990s"=ifelse(biggestmovie$year<2000 & biggestmovie$year>=1990,1,0)
+length(which(biggestmovie$`1990s`== 1))
+biggestmovie$"2000s"=ifelse(biggestmovie$year<2010 & biggestmovie$year>=2000,1,0)
+length(which(biggestmovie$`2000s`== 1))
+biggestmovie$"2010s"=ifelse(biggestmovie$year<2020 & biggestmovie$year>=2010,1,0)
+length(which(biggestmovie$`2010s`== 1))
+biggestmovie$"2020s"=ifelse(biggestmovie$year<2027 & biggestmovie$year>=2020,1,0)
+length(which(biggestmovie$`2020s`== 1))
+
+```
+
+
+

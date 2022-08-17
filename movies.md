@@ -30,10 +30,6 @@ Movies=mutate(Movies,"do people really mess with it like that "=dense_rank(vote_
 ```
 
 ``` r
-#Movies$aphabet=sort(Movies$title...4)
-```
-
-``` r
 Movies$releasedate2=Movies$release_date%>%as.character()
 ```
 
@@ -45,8 +41,104 @@ t=separate(Movies,releasedate2,c("date","year"),"-")
     ## 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...].
 
 ``` r
-Movies$"1910"=ifelse(t$date<1910,Movies$title...4,"na")
+bigmovie=cbind(t$date,Movies)
+#merge by title 
+#rename variable to merge 
+names(bigmovie)[5]= "title"
+biggestmovie=merge(bigmovie,moviemoney,"title")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+``` r
+#cleaned biggest movie to remove unnecessary data
+names(biggestmovie)[2]="year"
+biggestmovie$overview=NULL
+biggestmovie$title...7=NULL
+biggestmovie$id=NULL
+
+#rename variable to merge 
+names(bigmovie)[5]= "title"
+```
+
+``` r
+biggestmovie$"1910s"=ifelse(biggestmovie$year<1920 & biggestmovie$year>=1910,1,0)
+length(which(biggestmovie$`1910s`== 1))
+```
+
+    ## [1] 2
+
+``` r
+biggestmovie$"1920s"=ifelse(biggestmovie$year<1930 & biggestmovie$year>=1920,1,0)
+length(which(biggestmovie$`1920s`== 1))
+```
+
+    ## [1] 3
+
+``` r
+biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,1,0)
+length(which(biggestmovie$`1930s`== 1))
+```
+
+    ## [1] 12
+
+``` r
+biggestmovie$"1940s"=ifelse(biggestmovie$year<1950 & biggestmovie$year>=1940,1,0)
+length(which(biggestmovie$`1940s`== 1))
+```
+
+    ## [1] 15
+
+``` r
+biggestmovie$"1950s"=ifelse(biggestmovie$year<1960 & biggestmovie$year>=1950,1,0)
+length(which(biggestmovie$`1950s`== 1))
+```
+
+    ## [1] 26
+
+``` r
+biggestmovie$"1960s"=ifelse(biggestmovie$year<1970 & biggestmovie$year>=1960,1,0)
+length(which(biggestmovie$`1960s`== 1))
+```
+
+    ## [1] 65
+
+``` r
+biggestmovie$"1970s"=ifelse(biggestmovie$year<1980 & biggestmovie$year>=1970,1,0)
+length(which(biggestmovie$`1970s`== 1))
+```
+
+    ## [1] 105
+
+``` r
+biggestmovie$"1980s"=ifelse(biggestmovie$year<1990 & biggestmovie$year>=1980,1,0)
+length(which(biggestmovie$`1980s`== 1))
+```
+
+    ## [1] 233
+
+``` r
+biggestmovie$"1990s"=ifelse(biggestmovie$year<2000 & biggestmovie$year>=1990,1,0)
+length(which(biggestmovie$`1990s`== 1))
+```
+
+    ## [1] 572
+
+``` r
+biggestmovie$"2000s"=ifelse(biggestmovie$year<2010 & biggestmovie$year>=2000,1,0)
+length(which(biggestmovie$`2000s`== 1))
+```
+
+    ## [1] 1439
+
+``` r
+biggestmovie$"2010s"=ifelse(biggestmovie$year<2020 & biggestmovie$year>=2010,1,0)
+length(which(biggestmovie$`2010s`== 1))
+```
+
+    ## [1] 1056
+
+``` r
+biggestmovie$"2020s"=ifelse(biggestmovie$year<2027 & biggestmovie$year>=2020,1,0)
+length(which(biggestmovie$`2020s`== 1))
+```
+
+    ## [1] 20
