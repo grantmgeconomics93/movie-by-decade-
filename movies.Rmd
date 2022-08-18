@@ -19,7 +19,9 @@ View(moviemoney)
 ```{r,results='hide'}
 library(dplyr)
 library(tidyr)
-
+library(ggfortify)
+#disable Scientific notation 
+options(scipen = 999)
 ```
 
 
@@ -88,6 +90,19 @@ length(which(biggestmovie$`2020s`== 1))
 biggestmovie$gross=biggestmovie$revenue - biggestmovie$budget
 ```
 
+```{r}
+ggdistribution(dnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
+```
+
+```{r}
+max(biggestmovie$budget)
+moviesubmax=as.data.frame(biggestmovie%>%slice_min(budget,n=3038))
+```
+
+```{r}
+ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
+
+```
 
 
 

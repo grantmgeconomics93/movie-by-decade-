@@ -26,6 +26,21 @@ library(tidyr)
     ## Warning: package 'tidyr' was built under R version 4.1.3
 
 ``` r
+library(ggfortify)
+```
+
+    ## Warning: package 'ggfortify' was built under R version 4.1.3
+
+    ## Loading required package: ggplot2
+
+    ## Warning: package 'ggplot2' was built under R version 4.1.3
+
+``` r
+#disable Scientific notation 
+options(scipen = 999)
+```
+
+``` r
 Movies=mutate(Movies,"do people really mess with it like that "=dense_rank(vote_average))
 ```
 
@@ -142,3 +157,29 @@ length(which(biggestmovie$`2020s`== 1))
 ```
 
     ## [1] 20
+
+``` r
+biggestmovie$gross=biggestmovie$revenue - biggestmovie$budget
+```
+
+``` r
+ggdistribution(dnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
+```
+
+![](movies_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+max(biggestmovie$budget)
+```
+
+    ## [1] 380000000
+
+``` r
+moviesubmax=as.data.frame(biggestmovie%>%slice_min(budget,n=3038))
+```
+
+``` r
+ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
+```
+
+![](movies_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
