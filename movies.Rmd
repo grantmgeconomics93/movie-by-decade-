@@ -110,9 +110,10 @@ ggdistribution(dnorm,x = rslicedmovierten$budget,mean = mean(rslicedmovierten$bu
 ```{r}
 ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
 
+
 ```
 ```{r}
-lm(biggestmovie$revenue~biggestmovie$gross+biggestmovie$`1990s`+biggestmovie$`1960s`)
+lm(biggestmovie$revenue~biggestmovie$gross+biggestmovie$`1990s`+biggestmovie$`1960s`+biggestmovie$`1980s`+biggestmovie$`1970s`)
 ```
 
 

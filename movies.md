@@ -89,11 +89,11 @@ length(which(biggestmovie$`1920s`== 1))
     ## [1] 3
 
 ``` r
-biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,1,0)
+biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,0,0)
 length(which(biggestmovie$`1930s`== 1))
 ```
 
-    ## [1] 12
+    ## [1] 0
 
 ``` r
 biggestmovie$"1940s"=ifelse(biggestmovie$year<1950 & biggestmovie$year>=1940,1,0)
@@ -193,3 +193,18 @@ ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd
 ```
 
 ![](movies_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+lm(biggestmovie$revenue~biggestmovie$gross+biggestmovie$`1990s`+biggestmovie$`1960s`+biggestmovie$`1980s`+biggestmovie$`1970s`)
+```
+
+    ## 
+    ## Call:
+    ## lm(formula = biggestmovie$revenue ~ biggestmovie$gross + biggestmovie$`1990s` + 
+    ##     biggestmovie$`1960s` + biggestmovie$`1980s` + biggestmovie$`1970s`)
+    ## 
+    ## Coefficients:
+    ##          (Intercept)    biggestmovie$gross  biggestmovie$`1990s`  
+    ##         29790698.604                 1.156          -4372154.624  
+    ## biggestmovie$`1960s`  biggestmovie$`1980s`  biggestmovie$`1970s`  
+    ##        -18116005.511         -22171017.397         -22028922.175
