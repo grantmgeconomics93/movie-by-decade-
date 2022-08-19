@@ -64,7 +64,7 @@ biggestmovie$"1910s"=ifelse(biggestmovie$year<1920 & biggestmovie$year>=1910,1,0
 length(which(biggestmovie$`1910s`== 1))
 biggestmovie$"1920s"=ifelse(biggestmovie$year<1930 & biggestmovie$year>=1920,1,0)
 length(which(biggestmovie$`1920s`== 1))
-biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,1,0)
+biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,,0)
 length(which(biggestmovie$`1930s`== 1))
 biggestmovie$"1940s"=ifelse(biggestmovie$year<1950 & biggestmovie$year>=1940,1,0)
 length(which(biggestmovie$`1940s`== 1))
