@@ -169,14 +169,24 @@ ggdistribution(dnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd
 ![](movies_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
-max(biggestmovie$budget)
+ggdistribution(dnorm,x = biggestmovie$revenue,mean = mean(biggestmovie$revenue),sd = sd(biggestmovie$revenue))
 ```
 
-    ## [1] 380000000
+![](movies_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ``` r
-moviesubmax=as.data.frame(biggestmovie%>%slice_min(budget,n=3038))
+bslicedmovieten=biggestmovie%>%slice_min(budget,n=3038)
+ggdistribution(dnorm,x = bslicedmovieten$budget,mean = mean(bslicedmovieten$budget),sd = sd(bslicedmovieten$budget))
 ```
+
+![](movies_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+rslicedmovierten=slice_min(biggestmovie,revenue,n=3038)
+ggdistribution(dnorm,x = rslicedmovierten$budget,mean = mean(rslicedmovierten$budget),sd = sd(rslicedmovierten$budget))
+```
+
+![](movies_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
 ``` r
 ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
