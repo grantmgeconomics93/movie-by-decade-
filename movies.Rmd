@@ -64,13 +64,13 @@ biggestmovie$"1910s"=ifelse(biggestmovie$year<1920 & biggestmovie$year>=1910,1,0
 length(which(biggestmovie$`1910s`== 1))
 biggestmovie$"1920s"=ifelse(biggestmovie$year<1930 & biggestmovie$year>=1920,1,0)
 length(which(biggestmovie$`1920s`== 1))
-biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,0,0)
+biggestmovie$"1930s"=ifelse(biggestmovie$year<1940 & biggestmovie$year>=1930,1,0)
 length(which(biggestmovie$`1930s`== 1))
 biggestmovie$"1940s"=ifelse(biggestmovie$year<1950 & biggestmovie$year>=1940,1,0)
 length(which(biggestmovie$`1940s`== 1))
 biggestmovie$"1950s"=ifelse(biggestmovie$year<1960 & biggestmovie$year>=1950,1,0)
 length(which(biggestmovie$`1950s`== 1))
-biggestmovie$"1960s"=ifelse(biggestmovie$year<1970 & biggestmovie$year>=1960,1,0)
+biggestmovie$"1960s"=ifelse(biggestmovie$year<1970 & biggestmovie$year>=1960,0,0)
 length(which(biggestmovie$`1960s`== 1))
 biggestmovie$"1970s"=ifelse(biggestmovie$year<1980 & biggestmovie$year>=1970,1,0)
 length(which(biggestmovie$`1970s`== 1))
@@ -97,9 +97,9 @@ ggdistribution(dnorm,x = biggestmovie$revenue,mean = mean(biggestmovie$revenue),
 
 ```{r}
 
-bslicedmovieten=biggestmovie%>%slice_min(budget,n=3038)
+bslicedmovieten=biggestmovie%>%slice_min(budget,n=3518)
 ggdistribution(dnorm,x = bslicedmovieten$budget,mean = mean(bslicedmovieten$budget),sd = sd(bslicedmovieten$budget))
-rslicedmovierten=slice_min(biggestmovie,revenue,n=3038)
+rslicedmovierten=slice_min(biggestmovie,revenue,n=3518)
 ggdistribution(dnorm,x = rslicedmovierten$budget,mean = mean(rslicedmovierten$budget),sd = sd(rslicedmovierten$budget))
 ```
 
@@ -110,10 +110,11 @@ ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd
 
 ```
 ```{r}
-lm(biggestmovie$revenue~biggestmovie$budget+biggestmovie$`1990s`+biggestmovie$`2000s`+biggestmovie$`2010s`)
+summary(lm(biggestmovie$runtime ~biggestmovie$budget))
+summary(lm(biggestmovie$runtime ~biggestmovie$budget+biggestmovie$`2000s`))
 ```
 ```{r}
-lm(bslicedmovieten$revenue~bslicedmovieten$budget+bslicedmovieten$`1990s`+bslicedmovieten$`2000s`+bslicedmovieten$`2010s`)
+summary(lm(bslicedmovieten$gross~bslicedmovieten$budget))
 ```
 
 
