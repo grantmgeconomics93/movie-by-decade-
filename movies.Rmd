@@ -75,20 +75,20 @@ Hollywoo2=cbind(newdata,themovie, by="title")
 
 
 ```{r}
-biggestmovie$gross=biggestmovie$revenue - biggestmovie$budget
+Hollywoo2$gross=Hollywoo2$revenue - Hollywoo2$budget
 ```
 
 ```{r}
-ggdistribution(dnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
-ggdistribution(dnorm,x = biggestmovie$revenue,mean = mean(biggestmovie$revenue),sd = sd(biggestmovie$revenue))
+ggdistribution(dnorm,x = Hollywoo2$budget,mean = mean(Hollywoo2$budget),sd = sd(Hollywoo2$budget))
+ggdistribution(dnorm,x = Hollywoo2$revenue,mean = mean(Hollywoo2$revenue),sd = sd(Hollywoo2$revenue))
 ```
 
 ```{r}
 
-bslicedmovieten=biggestmovie%>%slice_min(budget,n=3518)
-ggdistribution(dnorm,x = bslicedmovieten$budget,mean = mean(bslicedmovieten$budget),sd = sd(bslicedmovieten$budget))
-rslicedmovierten=slice_min(biggestmovie,revenue,n=3518)
-ggdistribution(dnorm,x = rslicedmovierten$budget,mean = mean(rslicedmovierten$budget),sd = sd(rslicedmovierten$budget))
+budgetholly2=Hollywoo2%>%slice_min(budget,n=3518)
+ggdistribution(dnorm,x = Hollywoo2$budget,mean = mean(Hollywoo2$budget),sd = sd(Hollywoo2$budget))
+revenueholll2=slice_min(Hollywoo2,revenue,n=3518)
+ggdistribution(dnorm,x = Hollywoo2$budget,mean = mean(rslicedmovierten$budget),sd = sd(rslicedmovierten$budget))
 ```
 
 
