@@ -39,35 +39,23 @@ Movies$releasedate2=Movies$release_date%>%as.character()
 
 ```{r}
 year=separate(Movies,releasedate2,c("date","year"),"-")
-years=c()
-```
-```{r}
-
-bigmovie=cbind(year["date"],Movies)
-#merge by title 
-#rename variable to merge 
-names(bigmovie)[5]= "title"
-damovie=merge(bigmovie,moviemoney,"title")
-
-
-```
-```{r}
-#cleaned biggest movie to remove unnecessary data
-biggestmovie$overview=NULL
-biggestmovie$id=NULL
-Hollywood <- subset(biggestmovie, select = -c(3))
 names(year)[4]="title"
-year$overview= NULL
-
-year$numdate=as.numeric(year$date)
-themovie=merge(year,Hollywood,"title")
+years=subset(year,select = c("title","date"))
+```
+```{r}
+names(Movies)[4]="title"
+#cleaned biggest movie to remove unnecessary data
+Movies$overview=NULL
+Movies$title...7=NULL
+#Hollywood <- subset(Movies, select = -c(3))
+themovie=cbind(years[2],Movies )
 ```
 
 
 ```{r}
 decade=data.frame(title=as.character(themovie$title))
 
-decade$dec=themovie$numyear%%10*10
+decade$dec=as.numeric(year$date)%/%10*10
 ```
 
 
@@ -79,8 +67,8 @@ newdata <- one_hot(as.data.table(decade))
 
 ```
 ```{r}
-  Hollywoo2=merge(newdata,Hollywood, by="title")
-  hollydummdum=Hollywoo2[!duplicated(Hollywoo2), ]
+Hollywoo2=cbind(newdata,themovie, by="title")
+  
 ```
   
 
