@@ -66,16 +66,19 @@ newdata <- one_hot(as.data.table(decade))
 
 
 ```
-```{r}
-Hollywoo2=cbind(newdata,themovie, by="title")
+
   
+```{r}
+hollywoo3=merge(newdata,themovie,by="title")
+hollyhoo3$...1=NULL
+hollyhoo3$id=NULL
+
 ```
-  
 
 
 
 ```{r}
-Hollywoo2$gross=Hollywoo2$revenue - Hollywoo2$budget
+Hollywoo3$gross=Hollywoo2$revenue - Hollywoo2$budget
 ```
 
 ```{r}
