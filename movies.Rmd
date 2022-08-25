@@ -76,42 +76,35 @@ hollywoo3=cbind(themovie,newdata[,2:14])%>%subset(select =-c(2:6,7:8))%>%merge(m
 
 ```{r}
 
-Hollywood5$release_date.y=NULL
-Hollywood5$releasedate2=NULL
+hollywoo3$release_date.y=NULL
+hollywoo3$releasedate2=NULL
 
 ```
 
 
 
 ```{r}
-Hollywoo3$gross=Hollywoo2$revenue - Hollywoo2$budget
+hollywoo3$gross=hollywoo3$revenue - hollywoo3$budget
 ```
 
 ```{r}
-ggdistribution(dnorm,x = Hollywoo2$budget,mean = mean(Hollywoo2$budget),sd = sd(Hollywoo2$budget))
-ggdistribution(dnorm,x = Hollywoo2$revenue,mean = mean(Hollywoo2$revenue),sd = sd(Hollywoo2$revenue))
+ggdistribution(dnorm,x = hollywoo3$budget,mean = mean(hollywoo3$budget),sd = sd(hollywoo3$budget))
+ggdistribution(dnorm,x = hollywoo3$revenue,mean = mean(hollywoo3$revenue),sd = sd(hollywoo3$revenue))
 ```
 
 ```{r}
 
-budgetholly2=Hollywoo2%>%slice_min(budget,n=3518)
-ggdistribution(dnorm,x = Hollywoo2$budget,mean = mean(Hollywoo2$budget),sd = sd(Hollywoo2$budget))
-revenueholll2=slice_min(Hollywoo2,revenue,n=3518)
-ggdistribution(dnorm,x = Hollywoo2$budget,mean = mean(rslicedmovierten$budget),sd = sd(rslicedmovierten$budget))
-```
-
-
-```{r}
-ggdistribution(pnorm,x = biggestmovie$budget,mean = mean(biggestmovie$budget),sd = sd(biggestmovie$budget))
-
-
+budgetholly=slice_min(hollywoo3,budget,n=3518)
+ggdistribution(dnorm,x = budgetholly$budget,mean = mean(budgetholly$budget),sd = sd(budgetholly$budget))
+revenueholly=slice_min(hollywoo3,revenue,n=3518)
+ggdistribution(dnorm,x = revenueholly$budget,mean = mean(revenueholly$budget),sd = sd(revenueholly$budget))
 ```
 ```{r}
 summary(lm(biggestmovie$budget~biggestmovie$revenue))
 
 ```
 ```{r}
-summary(lm(bslicedmovieten$budget~bslicedmovieten$revenue))
+summary(lm(budgetholly$budget~budgetholly$revenue))
 ```
 ```{r}
 mean(biggestmovie$budget[biggestmovie$`1990s`==1])
