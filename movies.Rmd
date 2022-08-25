@@ -48,7 +48,7 @@ names(Movies)[4]="title"
 Movies$overview=NULL
 Movies$title...7=NULL
 #Hollywood <- subset(Movies, select = -c(3))
-themovie=cbind(years[2],Movies )
+themovie=cbind(years,Movies)
 ```
 
 
@@ -69,9 +69,15 @@ newdata <- one_hot(as.data.table(decade))
 
   
 ```{r}
-hollywoo3=merge(newdata,themovie,by="title")
-hollyhoo3$...1=NULL
-hollyhoo3$id=NULL
+hollywoo3=cbind(themovie,newdata[,2:14])%>%subset(select =-c(2:6,7:8))%>%merge(moviemoney,"title")%>%rename("release date"=release_date.x)
+
+```
+
+
+```{r}
+
+Hollywood5$release_date.y=NULL
+Hollywood5$releasedate2=NULL
 
 ```
 
