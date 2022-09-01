@@ -16,12 +16,14 @@ moviemoney <- read_excel("moviemoney.xlsx",
 View(moviemoney)
 ```
 
-```{r,results='hide'}
+```{r,echo=FALSE}
 library(dplyr)
 library(tidyr)
 library(ggfortify)
 library(mltools)
 library(data.table)
+library(fastDummies)
+library(caret)
 #disable Scientific notation 
 options(scipen = 999)
 ```
@@ -66,6 +68,41 @@ newdata <- one_hot(as.data.table(decade))
 
 
 ```
+```{r}
+dmy <- dummyVars(" ~ dec", data =decade)
+dumdum5 <- data.frame(predict(dmy, newdata = decade))
+dum6=cbind(newdata$title,dumdum5)
+```
+
+```{r}
+
+f=dummy_cols(decade,select_columns = "dec")
+
+```
+```{r}
+f$dec=NULL
+#make a reference group  1960
+#f$dec_1960=NULL
+```
+```{r}
+finaldum=as.data.frame(decade[sample(which(decade$dec =="1970" ) ,100),])
+rename(finaldum,"year1970"="dec")
+```
+
+```{r}
+length(which(hollywooref$dec_1960==1))
+length(which(hollywooref$dec_1970==1))
+length(which(hollywooref$dec_1980==1))
+length(which(hollywooref$dec_1990==1))
+length(which(hollywooref$dec_2000==1))
+length(which(hollywooref$dec_2010==1))
+length(which(hollywooref$dec_2020==1))
+```
+
+
+```{r}
+hollywooref=cbind(themovie,f[,2:13])%>%subset(select =-c(2:6,7:8))%>%merge(moviemoney,"title")%>%rename("release date"=release_date.x)
+```
 
   
 ```{r}
@@ -100,9 +137,21 @@ revenueholly=slice_min(hollywoo3,revenue,n=3518)
 ggdistribution(dnorm,x = revenueholly$budget,mean = mean(revenueholly$budget),sd = sd(revenueholly$budget))
 ```
 ```{r}
-summary(lm(biggestmovie$budget~biggestmovie$revenue))
+
+summary(lm(hollywooref$budget~hollywooref$dec_1990))
+summary(lm(hollywooref$budget~hollywooref$dec_1980))
+summary(lm(hollywooref$budget~hollywooref$dec_2010))
+summary(lm(hollywooref$budget~hollywooref$dec_2000))
 
 ```
+```{r}
+mean(hollywoo3$budget[hollywoo3$dec_1960==1])
+mean(hollywoo3$budget[hollywoo3$dec_1970==1])
+mean(hollywoo3$budget[hollywoo3$dec_1980==1])
+mean(hollywoo3$budget[hollywoo3$dec_1990==1])
+
+```
+
 ```{r}
 summary(lm(budgetholly$budget~budgetholly$revenue))
 ```
