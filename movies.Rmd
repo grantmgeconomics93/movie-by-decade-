@@ -5,9 +5,7 @@ date: "2022-08-16"
 ---
 
 ```{r setup, include=FALSE}
-library(readxl)
-Movies <- read_excel("~/git/movie-by-decade-/Movies.xlsx")
-View(Movies)
+options(scipen = 999)
 library(readxl)
 moviemoney <- read_excel("moviemoney.xlsx", 
     col_types = c("numeric", "skip", "skip", 
@@ -29,36 +27,44 @@ options(scipen = 999)
 ```
 
 
-```{r,}
-Movies=mutate(Movies,"do people really mess with it like that "=dense_rank(vote_average))
-```
 
 
 ```{r}
-Movies$releasedate2=Movies$release_date%>%as.character()
-```
-
-
-```{r}
-year=separate(Movies,releasedate2,c("date","year"),"-")
-names(year)[4]="title"
-years=subset(year,select = c("title","date"))
+#eliminating the numeric values
+moviepredum=data.frame(year=as.numeric(gsub('-..*','',moviemoney$release_date ))%/%10 *10,title=moviemoney$title)%>%filter(year>1959)
 ```
 ```{r}
-names(Movies)[4]="title"
-#cleaned biggest movie to remove unnecessary data
-Movies$overview=NULL
-Movies$title...7=NULL
-#Hollywood <- subset(Movies, select = -c(3))
-themovie=cbind(years,Movies)
+#eliminating the numeric values
+first =data.frame(year=as.numeric(gsub('-..*','',moviemoney$release_date ))%/%10 *10,title=moviemoney$title)%>%filter( year==2000|year==2010 |year==1990|year==1980|year==1970)
 ```
-
+```{r}
+sec=dummy_cols(first,"year",remove_first_dummy = TRUE)
+```
 
 ```{r}
-decade=data.frame(title=as.character(themovie$title))
 
-decade$dec=as.numeric(year$date)%/%10*10
+dummyfulldata=merge(sec,moviemoney,"title")
+
+
 ```
+```{r}
+summary(lm(dummyfulldata$budget~dummyfulldata$year_1980+dummyfulldata$year_1990+dummyfulldata$year_2000+dummyfulldata$year_2010))
+
+
+```
+
+```{r}
+
+length(which(moviefindum$year_1970==1))
+length(which(moviefindum$year_1980==1))
+length(which(moviefindum$year_1990==1))
+length(which(moviefindum$year_2000==1))
+length(which(moviefindum$year_2010==1))
+```
+```{r}
+finalcut=merge(moviemoney,moviefindum,"title")
+```
+
 
 
 ```{r}
@@ -75,73 +81,26 @@ dum6=cbind(newdata$title,dumdum5)
 ```
 
 ```{r}
-
-f=dummy_cols(decade,select_columns = "dec")
-
-```
-```{r}
-f$dec=NULL
-#make a reference group  1960
-#f$dec_1960=NULL
-```
-```{r}
-finaldum=as.data.frame(decade[sample(which(decade$dec =="1970" ) ,100),])
-rename(finaldum,"year1970"="dec")
-```
-
-```{r}
-length(which(hollywooref$dec_1960==1))
-length(which(hollywooref$dec_1970==1))
-length(which(hollywooref$dec_1980==1))
-length(which(hollywooref$dec_1990==1))
-length(which(hollywooref$dec_2000==1))
-length(which(hollywooref$dec_2010==1))
-length(which(hollywooref$dec_2020==1))
-```
-
-
-```{r}
-hollywooref=cbind(themovie,f[,2:13])%>%subset(select =-c(2:6,7:8))%>%merge(moviemoney,"title")%>%rename("release date"=release_date.x)
-```
-
-  
-```{r}
-hollywoo3=cbind(themovie,newdata[,2:14])%>%subset(select =-c(2:6,7:8))%>%merge(moviemoney,"title")%>%rename("release date"=release_date.x)
-
-```
-
-
-```{r}
-
-hollywoo3$release_date.y=NULL
-hollywoo3$releasedate2=NULL
-
-```
-
-
-
-```{r}
 hollywoo3$gross=hollywoo3$revenue - hollywoo3$budget
 ```
 
 ```{r}
-ggdistribution(dnorm,x = hollywoo3$budget,mean = mean(hollywoo3$budget),sd = sd(hollywoo3$budget))
-ggdistribution(dnorm,x = hollywoo3$revenue,mean = mean(hollywoo3$revenue),sd = sd(hollywoo3$revenue))
+ggdistribution(dnorm,x = finalcut$budget,mean = mean(finalcut$budget),sd = sd(finalcut$budget))
+ggdistribution(dnorm,x = finalcut$revenue,mean = mean(finalcut$revenue),sd = sd(finalcut$revenue))
 ```
 
 ```{r}
 
-budgetholly=slice_min(hollywoo3,budget,n=3518)
-ggdistribution(dnorm,x = budgetholly$budget,mean = mean(budgetholly$budget),sd = sd(budgetholly$budget))
-revenueholly=slice_min(hollywoo3,revenue,n=3518)
-ggdistribution(dnorm,x = revenueholly$budget,mean = mean(revenueholly$budget),sd = sd(revenueholly$budget))
+budgetholly=slice_min(finalcut,budget,n=3518)
+ggdistribution(dnorm,x = finalcut$budget,mean = mean(finalcut$budget),sd = sd(finalcut$budget))
+revenueholly=slice_min(finalcut,revenue,n=3518)
+ggdistribution(dnorm,x = finalcut$budget,mean = mean(finalcut$budget),sd = sd(finalcut$budget))
 ```
 ```{r}
 
-summary(lm(hollywooref$budget~hollywooref$dec_1990))
-summary(lm(hollywooref$budget~hollywooref$dec_1980))
-summary(lm(hollywooref$budget~hollywooref$dec_2010))
-summary(lm(hollywooref$budget~hollywooref$dec_2000))
+summary(lm(finalcut$budget~finalcut$runtime+finalcut$year_1970))
+summary(lm(finalcut$budget~finalcut$runtime+finalcut$year_1980))
+
 
 ```
 ```{r}
