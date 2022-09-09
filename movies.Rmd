@@ -28,96 +28,65 @@ options(scipen = 999)
 
 
 
-
 ```{r}
-#eliminating the numeric values
-moviepredum=data.frame(year=as.numeric(gsub('-..*','',moviemoney$release_date ))%/%10 *10,title=moviemoney$title)%>%filter(year>1959)
-```
-```{r}
-#eliminating the numeric values
+#create a dataframe for creating dummies  with two columns the decade when the movie was made byand the title of the movie 
 first =data.frame(year=as.numeric(gsub('-..*','',moviemoney$release_date ))%/%10 *10,title=moviemoney$title)%>%filter( year==2000|year==2010 |year==1990|year==1980|year==1970)
 ```
 ```{r}
-sec=dummy_cols(first,"year",remove_first_dummy = TRUE)
+#create dummies per decade 
+sec=dummy_cols(first,"year",remove_first_dummy = FALSE)
 ```
 
 ```{r}
-
+# merge dummies to "moviemoney" to dummies so we can compare data to financial data 
 dummyfulldata=merge(sec,moviemoney,"title")
 
 
 ```
 ```{r}
+#get rid of the top budget and revenue movies to get a understanding of the "block buster"effect where the biggest movies drive sells
+
+buddummy=slice_min(dummyfulldata,budget,n=4564)
+
+revdummy=slice_min(dummyfulldata,revenue,n=4564)
+
+```
+
+```{r}
 summary(lm(dummyfulldata$budget~dummyfulldata$year_1980+dummyfulldata$year_1990+dummyfulldata$year_2000+dummyfulldata$year_2010))
 
 
 ```
-
 ```{r}
-
-length(which(moviefindum$year_1970==1))
-length(which(moviefindum$year_1980==1))
-length(which(moviefindum$year_1990==1))
-length(which(moviefindum$year_2000==1))
-length(which(moviefindum$year_2010==1))
-```
-```{r}
-finalcut=merge(moviemoney,moviefindum,"title")
+summary(lm(buddummy$budget~buddummy$year_1980+buddummy$year_1990+buddummy$year_2000+buddummy$year_2010))
 ```
 
 
 
 ```{r}
+#trying different dummyways to create dummy column 
 newdata <- one_hot(as.data.table(decade))
 decade$dec <- as.factor(decade$dec)
 newdata <- one_hot(as.data.table(decade))
 
 
-```
-```{r}
+
 dmy <- dummyVars(" ~ dec", data =decade)
 dumdum5 <- data.frame(predict(dmy, newdata = decade))
 dum6=cbind(newdata$title,dumdum5)
 ```
 
+
+
 ```{r}
-hollywoo3$gross=hollywoo3$revenue - hollywoo3$budget
+ggdistribution(dnorm,x = dummyfulldata$budget,mean = mean(dummyfulldata$budget),sd = sd(dummyfulldata$budget))
+ggdistribution(dnorm,x = dummyfulldata$revenue,mean = mean(dummyfulldata$revenue),sd = sd(dummyfulldata$revenue))
 ```
 
 ```{r}
-ggdistribution(dnorm,x = finalcut$budget,mean = mean(finalcut$budget),sd = sd(finalcut$budget))
-ggdistribution(dnorm,x = finalcut$revenue,mean = mean(finalcut$revenue),sd = sd(finalcut$revenue))
-```
 
-```{r}
-
-budgetholly=slice_min(finalcut,budget,n=3518)
-ggdistribution(dnorm,x = finalcut$budget,mean = mean(finalcut$budget),sd = sd(finalcut$budget))
-revenueholly=slice_min(finalcut,revenue,n=3518)
-ggdistribution(dnorm,x = finalcut$budget,mean = mean(finalcut$budget),sd = sd(finalcut$budget))
-```
-```{r}
-
-summary(lm(finalcut$budget~finalcut$runtime+finalcut$year_1970))
-summary(lm(finalcut$budget~finalcut$runtime+finalcut$year_1980))
-
+buddummy=slice_min(dummyfulldata,budget,n=4564)
+ggdistribution(dnorm,x = dummyfulldata$budget,mean = mean(dummyfulldata$budget),sd = sd(dummyfulldata$budget))
+revdummy=slice_min(dummyfulldata,revenue,n=4564)
 
 ```
-```{r}
-mean(hollywoo3$budget[hollywoo3$dec_1960==1])
-mean(hollywoo3$budget[hollywoo3$dec_1970==1])
-mean(hollywoo3$budget[hollywoo3$dec_1980==1])
-mean(hollywoo3$budget[hollywoo3$dec_1990==1])
-
-```
-
-```{r}
-summary(lm(budgetholly$budget~budgetholly$revenue))
-```
-```{r}
-mean(biggestmovie$budget[biggestmovie$`1990s`==1])
-```
-
-
-
-
