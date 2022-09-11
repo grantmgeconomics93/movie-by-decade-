@@ -21,7 +21,8 @@ library(ggfortify)
 library(mltools)
 library(data.table)
 library(fastDummies)
-library(caret)
+#library(caret)
+library(tidyverse)
 #disable Scientific notation 
 options(scipen = 999)
 ```
@@ -30,11 +31,11 @@ options(scipen = 999)
 
 ```{r}
 #create a dataframe for creating dummies  with two columns the decade when the movie was made byand the title of the movie 
-first =data.frame(year=as.numeric(gsub('-..*','',moviemoney$release_date ))%/%10 *10,title=moviemoney$title)%>%filter( year==2000|year==2010 |year==1990|year==1980|year==1970)
+first =data.frame(year=as.numeric(gsub('-..*','',moviemoney$release_date ))%/%10 *10,title=moviemoney$title)%>%filter( year==2000|year==2010 |year==1990|year==1980)
 ```
 ```{r}
 #create dummies per decade 
-sec=dummy_cols(first,"year",remove_first_dummy = FALSE)
+sec=dummy_cols(first,"year")
 ```
 
 ```{r}
@@ -46,21 +47,30 @@ dummyfulldata=merge(sec,moviemoney,"title")
 ```{r}
 #get rid of the top budget and revenue movies to get a understanding of the "block buster"effect where the biggest movies drive sells
 
-buddummy=slice_min(dummyfulldata,budget,n=4564)
+tt=subset(dummyfulldata,year==1980)%>%slice_min(revenue,n =180)
+to=subset(dummyfulldata,year==1990)%>%slice_min(revenue,n =678)
+tb=subset(dummyfulldata,year==2000)%>%slice_min(revenue,n =1950)
+tf=subset(dummyfulldata,year==2010)%>%slice_min(revenue,n =1347)
 
-revdummy=slice_min(dummyfulldata,revenue,n=4564)
+```
+```{r}
+#exblockbuster=reduce(merge,(tt,to,tb,tf))
+exblockbuster=rbind(tt,to,tb,tf)
 
 ```
 
 ```{r}
-summary(lm(dummyfulldata$budget~dummyfulldata$year_1980+dummyfulldata$year_1990+dummyfulldata$year_2000+dummyfulldata$year_2010))
+summary(lm(dummyfulldata$budget~dummyfulldata$year_1990+dummyfulldata$year_2000+dummyfulldata$year_2010))
 
 
 ```
 ```{r}
-summary(lm(buddummy$budget~buddummy$year_1980+buddummy$year_1990+buddummy$year_2000+buddummy$year_2010))
+summary(lm(exblockbuster$budget~exblockbuster$year_1990+exblockbuster$year_2000+exblockbuster$year_2010))
 ```
 
+```{r}
+
+```
 
 
 ```{r}
@@ -80,13 +90,13 @@ dum6=cbind(newdata$title,dumdum5)
 
 ```{r}
 ggdistribution(dnorm,x = dummyfulldata$budget,mean = mean(dummyfulldata$budget),sd = sd(dummyfulldata$budget))
-ggdistribution(dnorm,x = dummyfulldata$revenue,mean = mean(dummyfulldata$revenue),sd = sd(dummyfulldata$revenue))
+
+ggdistribution(dnorm,x = exblockbuster$budget,mean = mean(exblockbuster$budget),sd = sd(exblockbuster$budget))
+
 ```
 
 ```{r}
 
-buddummy=slice_min(dummyfulldata,budget,n=4564)
-ggdistribution(dnorm,x = dummyfulldata$budget,mean = mean(dummyfulldata$budget),sd = sd(dummyfulldata$budget))
-revdummy=slice_min(dummyfulldata,revenue,n=4564)
+
 
 ```
