@@ -21,6 +21,7 @@ library(ggfortify)
 library(mltools)
 library(data.table)
 library(fastDummies)
+library(ggplot2)
 #library(caret)
 library(tidyverse)
 #disable Scientific notation 
@@ -45,7 +46,7 @@ dummyfulldata=merge(sec,moviemoney,"title")
 
 ```
 ```{r}
-#get rid of the top budget and revenue movies to get a understanding of the "block buster"effect where the biggest movies drive sells
+#get rid of the top 100 budget and revenue movies to get a understanding of the "block buster"effect where the biggest movies drive sells
 
 tt=subset(dummyfulldata,year==1980)%>%slice_min(revenue,n =180)
 to=subset(dummyfulldata,year==1990)%>%slice_min(revenue,n =678)
@@ -54,17 +55,19 @@ tf=subset(dummyfulldata,year==2010)%>%slice_min(revenue,n =1347)
 
 ```
 ```{r}
-#exblockbuster=reduce(merge,(tt,to,tb,tf))
+# combine decades without 100  biggest movies By revenue  of each decade 
 exblockbuster=rbind(tt,to,tb,tf)
 
 ```
 
 ```{r}
+# run regression of all movies 
 summary(lm(dummyfulldata$budget~dummyfulldata$year_1990+dummyfulldata$year_2000+dummyfulldata$year_2010))
 
 
 ```
 ```{r}
+# run regression of movies without 100 biggest by revenue per decade 
 summary(lm(exblockbuster$budget~exblockbuster$year_1990+exblockbuster$year_2000+exblockbuster$year_2010))
 ```
 
@@ -74,7 +77,7 @@ summary(lm(exblockbuster$budget~exblockbuster$year_1990+exblockbuster$year_2000+
 
 
 ```{r}
-#trying different dummyways to create dummy column 
+#trying different dummyways to create dummy column variables names reflect prior versions  
 newdata <- one_hot(as.data.table(decade))
 decade$dec <- as.factor(decade$dec)
 newdata <- one_hot(as.data.table(decade))
@@ -89,9 +92,14 @@ dum6=cbind(newdata$title,dumdum5)
 
 
 ```{r}
-ggdistribution(dnorm,x = dummyfulldata$budget,mean = mean(dummyfulldata$budget),sd = sd(dummyfulldata$budget))
+ggplot(dummyfulldata, aes(budget)) +
+  stat_ecdf(geom = "step", pad = FALSE)
+ggplot(exblockbuster,aes(budget))+stat_ecdf(geom = "step",pad = FALSE)
 
-ggdistribution(dnorm,x = exblockbuster$budget,mean = mean(exblockbuster$budget),sd = sd(exblockbuster$budget))
+# Density curve
+ggplot(dummyfulldata, aes(x=budget )) + geom_density()
+# Density curve
+ggplot(exblockbuster, aes(x=budget )) + geom_density()
 
 ```
 
