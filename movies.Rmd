@@ -72,7 +72,7 @@ summary(lm(exblockbuster$budget~exblockbuster$year_1990+exblockbuster$year_2000+
 ```
 
 ```{r}
-
+#test
 ```
 
 
