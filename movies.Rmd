@@ -68,8 +68,16 @@ summary(lm(dummyfulldata$budget~dummyfulldata$year_1990+dummyfulldata$year_2000+
 # run regression of movies without 100 biggest by revenue per decade 
 summary(lm(exblockbuster$budget~exblockbuster$year_1990+exblockbuster$year_2000+exblockbuster$year_2010))
 ```
+```{r}
+# run two regressions : budget on runtime on the two separate datasets. this is to  find if movies with bigger budgets are longer.we can think of this as the average cost Of making a movie a minute longer.
+summary(lm(dummyfulldata$budget~dummyfulldata$runtime))
+summary(lm(exblockbuster$budget~exblockbuster$runtime))
+
+```
 
 ```{r}
+summary(lm(dummyfulldata$revenue~dummyfulldata$runtime))
+summary(lm(exblockbuster$revenue~exblockbuster$runtime))
 
 ```
 
@@ -90,10 +98,10 @@ dum6=cbind(newdata$title,dumdum5)
 
 
 ```{r}
-# Density curve
+# Density curve Full data 
 ggplot(dummyfulldata, aes(x=budget )) + geom_density()+labs(title="full dataset ",x="budget range from 0 to 3 billion ",y="percent per movie")+geom_density(color="brown2")
-# Density curve
-ggplot(exblockbuster, aes(x=budget )) + geom_density()+labs(title="exblockbuster",x="budget range from 0 to 3 billion ",y="percent per movie")
+# Density curve Exblockbuster 
+ggplot(exblockbuster, aes(x=budget )) + geom_density()+labs(title="exblockbuster",x="budget range from 0 to 3 billion ",y="percent per movie")+geom_density(color="red")
 
 ```
 
